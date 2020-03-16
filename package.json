@@ -1,7 +1,7 @@
 {
-  "name": "project_12",
+  "name": "project_13",
   "version": "0.0.1",
-  "description": "Backend for Mesto project, written on Express.js",
+  "description": "Backend for Mesto project, using MongoDB",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
@@ -18,7 +18,9 @@
     "nodemon": "^2.0.2"
   },
   "dependencies": {
+    "acorn": "^7.1.1",
     "express": "^4.17.1",
+    "minimist": "^1.2.5",
     "mongoose": "^5.9.4",
     "validator": "^12.2.0"
   }
