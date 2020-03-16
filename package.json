@@ -1,0 +1,25 @@
+{
+  "name": "project_12",
+  "version": "0.0.1",
+  "description": "Backend for Mesto project, written on Express.js",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "keywords": [],
+  "author": "Anastasiia Loginova",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-vue": "^6.2.1",
+    "nodemon": "^2.0.2"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.9.4",
+    "validator": "^12.2.0"
+  }
+}
