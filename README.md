@@ -47,7 +47,7 @@ npm install
 ```
 {
     "name": "Тестовая карточка",
-    "avatar": "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg"
+    "link": "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg"
 }
 ```
 
