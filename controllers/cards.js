@@ -16,9 +16,10 @@ module.exports.createCard = (req, res) => {
   // eslint-disable-next-line object-curly-newline
   Card.create({ name, link, owner: userId, likes })
     .then((card) => res.status(201).send({ data: card }))
+    // eslint-disable-next-line consistent-return
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: err.message, name: err.name });
+        return res.status(400).send({ message: err.message });
       }
       res.status(500).send({ message: err.message });
     });
