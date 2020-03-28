@@ -1,19 +1,19 @@
-const mongoose = require("mongoose");
-const validator = require("validator");
+const mongoose = require('mongoose');
+const validator = require('validator');
 
-//схема пользователя
+// схема пользователя
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
     minlength: 2,
-    maxlength: 30
+    maxlength: 30,
   },
   about: {
     type: String,
     required: true,
     minlength: 2,
-    maxlength: 30
+    maxlength: 30,
   },
   avatar: {
     type: String,
@@ -21,9 +21,9 @@ const userSchema = new mongoose.Schema({
     validate: {
       validator(link) {
         return validator.isURL(link);
-      }
-    }
-  }
+      },
+    },
+  },
 });
 
-module.exports = mongoose.model("user", userSchema);
+module.exports = mongoose.model('user', userSchema);

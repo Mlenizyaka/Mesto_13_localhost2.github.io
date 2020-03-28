@@ -1,13 +1,13 @@
-const mongoose = require("mongoose");
-const validator = require("validator");
+const Mongoose = require('mongoose');
+const validator = require('validator');
 
 // схема карточки
-const cardSchema = new mongoose.Schema({
+const cardSchema = new Mongoose.Schema({
   name: {
     type: String,
     required: true,
     minlength: 2,
-    maxlength: 30
+    maxlength: 30,
   },
   link: {
     type: String,
@@ -15,22 +15,22 @@ const cardSchema = new mongoose.Schema({
     validate: {
       validator(link) {
         return validator.isURL(link);
-      }
-    }
+      },
+    },
   },
   owner: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "user",
-    required: true
+    type: Mongoose.Schema.Types.ObjectId,
+    ref: 'user',
+    required: true,
   },
-  likes: {
-    type: mongoose.Schema.Types.ObjectId,
-    default: []
-  },
+  likes: [{
+    type: Mongoose.Schema.Types.ObjectId,
+    default: [],
+  }],
   createdAt: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
-module.exports = mongoose.model("card", cardSchema);
+module.exports = Mongoose.model('card', cardSchema);
