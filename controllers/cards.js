@@ -26,17 +26,21 @@ module.exports.createCard = (req, res) => {
 };
 
 // Удаляет карточку с указанным id
+// eslint-disable-next-line no-unused-vars
 module.exports.deleteCard = (req, res, err) => {
-  Card.findByIdAndRemove(req.params.id)
+  Card.findOne({ _id: req.params.cardId })
     // eslint-disable-next-line consistent-return
-    .then((result) => {
-      if (!result) {
-        return res.status(404).send({
-          message: 'Карточка с таким id отсутствует',
-          err: err.message,
-        });
+    .then((card) => {
+      if (card.owner === req.user._id) {
+        return Card.findByIdAndRemove(req.params.id)
+          // eslint-disable-next-line consistent-return
+          .then((result) => {
+            res.status(200).send({ data: result });
+          })
+          // eslint-disable-next-line no-shadow
+          .catch((err) => res.status(400).send({ message: err.message }));
       }
-      res.send({ data: result });
+      res.status(400).send('Необходимо авторизоваться чтобы удалить карточку');
     })
     // eslint-disable-next-line no-shadow
     .catch((err) => res.status(500).send({ message: err.message }));
