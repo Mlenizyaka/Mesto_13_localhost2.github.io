@@ -1,9 +1,7 @@
 const bcrypt = require('bcryptjs');
-require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const User = require('../models/user.js');
-
-const { NODE_ENV, JWT_SECRET } = process.env;
+const secretKey = require('../utils/secretKey');
 
 // Получаем всех пользователей из базы
 const getUsers = (req, res) => {
@@ -61,7 +59,7 @@ const login = (req, res) => {
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id },
-        NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
+        secretKey,
         { expiresIn: '7d' });
 
       res.cookie('jwt', token, {
