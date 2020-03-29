@@ -2,8 +2,8 @@ const router = require('express').Router();
 const auth = require('../middlewares/auth');
 
 const {
-  getUsers,
   getUserById,
+  getUsers,
 } = require('../controllers/users.js');
 
 router.use(auth);

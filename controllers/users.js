@@ -6,14 +6,14 @@ const User = require('../models/user.js');
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 // Получаем всех пользователей из базы
-module.exports.getUsers = (req, res) => {
+const getUsers = (req, res) => {
   User.find({})
     .then((user) => res.send({ data: user }))
     .catch((err) => res.status(500).send({ message: 'Произошла ошибка', err: err.message }));
 };
 
 // Возвращаем пользователя с указанным Id
-module.exports.getUserById = (req, res, err) => {
+const getUserById = (req, res, err) => {
   User.findById(req.params.id)
     // eslint-disable-next-line consistent-return
     .then((result) => {
@@ -29,7 +29,7 @@ module.exports.getUserById = (req, res, err) => {
 };
 
 // Создаем нового пользоввателя
-module.exports.userCreate = (req, res) => {
+const userCreate = (req, res) => {
   const {
     name, about, avatar, email, password,
   } = req.body;
@@ -55,7 +55,7 @@ module.exports.userCreate = (req, res) => {
 };
 
 // Вход в систему (логин)
-module.exports.login = (req, res) => {
+const login = (req, res) => {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
@@ -75,4 +75,8 @@ module.exports.login = (req, res) => {
     .catch((err) => {
       res.status(401).send({ message: err.message });
     });
+};
+
+module.exports = {
+  getUserById, getUsers, login, userCreate,
 };
