@@ -11,18 +11,16 @@ const getUsers = (req, res) => {
 };
 
 // Возвращаем пользователя с указанным Id
-const getUserById = (req, res, err) => {
+const getUserById = (req, res) => {
   User.findById(req.params.id)
-    // eslint-disable-next-line consistent-return
     .then((result) => {
       if (!result) {
         return res
           .status(404)
-          .send({ message: 'Такой пользователь не найден', err: err.message });
+          .send({ message: 'Такой пользователь не найден' });
       }
-      res.send({ data: result });
+      return res.send({ data: result });
     })
-    // eslint-disable-next-line no-shadow
     .catch((err) => res.status(500).send({ message: 'Произошла ошибка', err: err.message }));
 };
 
@@ -31,24 +29,26 @@ const userCreate = (req, res) => {
   const {
     name, about, avatar, email, password,
   } = req.body;
+
   User.findOne({ email })
-    // eslint-disable-next-line consistent-return
     .then((user) => {
       if (user) {
-        return res.status(400).send({ message: 'Такой пользователь уже существует' });
+        res.status(400).send({ message: 'Такой пользователь уже существует' });
       }
-      // хешируем пароль
-      bcrypt.hash(password, 10)
-        .then((hash) => User.create({
-          email,
-          password: hash, // записываем хеш в базу
-          name,
-          about,
-          avatar,
+    });
+  // хешируем пароль
+  bcrypt.hash(password, 10)
+    .then((hash) => {
+      User.create({
+        name, about, avatar, email, password: hash,
+      })
+        .then((user) => res.status(201).send({
+          name: user.name,
+          about: user.about,
+          avatar: user.avatar,
+          email: user.email,
         }))
-        // eslint-disable-next-line no-shadow
-        .then((user) => res.status(201).send({ data: user }))
-        .catch((err) => res.status(400).send({ message: 'Произошла ошибка', error: err.name }));
+        .catch((err) => res.status(500).send({ message: err.message }));
     });
 };
 
