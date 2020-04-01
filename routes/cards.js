@@ -1,9 +1,10 @@
 const router = require('express').Router();
+const auth = require('../middlewares/auth');
 
 const { getCards, createCard, deleteCard } = require('../controllers/cards');
 
-router.get('/', getCards); // получить все карточки
-router.post('/', createCard); // создать карточку
-router.delete('/:id', deleteCard); // удалить карточку
+router.get('/', auth, getCards);
+router.post('/', auth, createCard);
+router.delete('/:id', auth, deleteCard);
 
 module.exports = router;

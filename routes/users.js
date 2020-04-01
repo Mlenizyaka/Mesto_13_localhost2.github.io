@@ -1,13 +1,14 @@
 const router = require('express').Router();
+const auth = require('../middlewares/auth');
 
 const {
-  userCreate,
-  getUsers,
   getUserById,
+  getUsers,
 } = require('../controllers/users.js');
 
-router.get('/', getUsers); // получаем всех пользователей
-router.get('/:id', getUserById); // получаем конкретного пользователя по id
-router.post('/', userCreate); // создаем пользователя
+router.use(auth);
+
+router.get('/', getUsers);
+router.get('/:id', getUserById);
 
 module.exports = router;
