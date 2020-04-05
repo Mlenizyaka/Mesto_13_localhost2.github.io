@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const { celebrate, Joi } = require('celebrate');
 const auth = require('../middlewares/auth');
 
 const {
@@ -9,6 +10,8 @@ const {
 router.use(auth);
 
 router.get('/', getUsers);
-router.get('/:id', getUserById);
+router.get('/:id', celebrate({
+  params: Joi.string().alphanum().length(24),
+}), getUserById);
 
 module.exports = router;

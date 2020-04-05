@@ -2,30 +2,30 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user.js');
 const secretKey = require('../utils/secretKey');
+const BadRequestError = require('../errors/BadRequestError');
+const NotFoundError = require('../errors/NotFoundError');
 
 // Получаем всех пользователей из базы
-const getUsers = (req, res) => {
+const getUsers = (req, res, next) => {
   User.find({})
     .then((user) => res.send({ data: user }))
-    .catch((err) => res.status(500).send({ message: 'Произошла ошибка', err: err.message }));
+    .catch(next);
 };
 
 // Возвращаем пользователя с указанным Id
-const getUserById = (req, res) => {
+const getUserById = (req, res, next) => {
   User.findById(req.params.id)
     .then((result) => {
       if (!result) {
-        return res
-          .status(404)
-          .send({ message: 'Такой пользователь не найден' });
+        throw new NotFoundError('Такой пользователь не найден');
       }
       return res.send({ data: result });
     })
-    .catch((err) => res.status(500).send({ message: 'Произошла ошибка', err: err.message }));
+    .catch(next);
 };
 
 // Создаем нового пользоввателя
-const userCreate = (req, res) => {
+const userCreate = (req, res, next) => {
   const {
     name, about, avatar, email, password,
   } = req.body;
@@ -33,7 +33,7 @@ const userCreate = (req, res) => {
   User.findOne({ email })
     .then((user) => {
       if (user) {
-        res.status(400).send({ message: 'Такой пользователь уже существует' });
+        throw new BadRequestError('Такой пользователь уже существует');
       }
     });
   // хешируем пароль
@@ -48,12 +48,12 @@ const userCreate = (req, res) => {
           avatar: user.avatar,
           email: user.email,
         }))
-        .catch((err) => res.status(500).send({ message: err.message }));
+        .catch(next);
     });
 };
 
 // Вход в систему (логин)
-const login = (req, res) => {
+const login = (req, res, next) => {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
@@ -70,9 +70,7 @@ const login = (req, res) => {
 
       res.send({ token });
     })
-    .catch((err) => {
-      res.status(401).send({ message: err.message });
-    });
+    .catch(next);
 };
 
 module.exports = {
