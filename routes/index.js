@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 const { errors } = require('celebrate');
-const { errorHandler } = require('../middlewares/errorHandler');
+const errorHandler = require('../middlewares/errorHandler');
 const { requestLogger, errorLogger } = require('../middlewares/logger');
 const authorization = require('./authorization');
 const registration = require('./registration');
