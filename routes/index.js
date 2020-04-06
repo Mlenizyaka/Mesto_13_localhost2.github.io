@@ -2,6 +2,7 @@ const { errors } = require('celebrate');
 const router = require('express').Router();
 
 const errorHandler = require('../middlewares/errorHandler');
+const middlewares = require('../middlewares/index');
 const { requestLogger, errorLogger } = require('../middlewares/logger');
 const authorization = require('./authorization');
 const registration = require('./registration');
@@ -10,6 +11,7 @@ const cards = require('./cards');
 const error = require('./error');
 
 router.use(requestLogger); // логгер запросов
+router.use(middlewares);
 
 router.get('/crash-test', () => {
   setTimeout(() => {

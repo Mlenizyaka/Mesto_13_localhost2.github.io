@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 
-const middlewares = require('./middlewares/index');
 const routers = require('./routes/index');
 
 const { PORT = 3000 } = process.env;
@@ -15,7 +14,6 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useFindAndModify: false,
 });
 
-app.use(middlewares);
 app.use(routers);
 
 app.listen(PORT, () => {
