@@ -1,14 +1,9 @@
 # Сервер для проекта Mesto
 
-V0.1.0
+V0.0.2
 
 Сервер написан на Express.js.
 Node.js приложение подключается к серверу Mongo.
-
-## Демо
-
-К api можно обратиться по адресу `www.api.mesto-mlenizyaka.ru`, `api.mesto-mlenizyaka.ru` или по ip `84.201.138.175`
-
 
 ## Установка
 

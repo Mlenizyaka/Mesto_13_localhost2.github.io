@@ -1,18 +1,15 @@
 const Card = require('../models/card');
-const NotFoundError = require('../errors/NotFoundError');
-const BadRequestError = require('../errors/BadRequestError');
-const AuthorizationError = require('../errors/AuthorizationError');
 
 // Возвращает список всех карточек
-const getCards = (req, res, next) => {
+const getCards = (req, res) => {
   Card.find({})
     .populate('owner')
     .then((cards) => res.send({ data: cards }))
-    .catch(next);
+    .catch((err) => res.status(500).send({ message: err.message }));
 };
 
 // Создает новую карточку
-const createCard = (req, res, next) => {
+const createCard = (req, res) => {
   const { name, link, likes } = req.body;
   const userId = req.user._id;
 
@@ -23,24 +20,29 @@ const createCard = (req, res, next) => {
     likes,
   })
     .then((card) => res.status(201).send({ data: card }))
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        return res.status(400).send({ message: err.message });
+      }
+      return res.status(500).send({ message: err.message });
+    });
 };
 
 // Удаляет карточку с указанным id
-const deleteCard = (req, res, next) => {
+const deleteCard = (req, res) => {
   Card.findById(req.params.id)
     .then((card) => {
       if (!card) {
-        throw new NotFoundError('Карточка с таким id не найдена');
+        return res.status(404).send({ message: `Карточка с id ${req.params.id} не найдена` });
       }
       if (card.owner._id.toString() === req.user._id) {
         return Card.findByIdAndRemove(req.params.id)
           .then((result) => res.status(200).send({ message: `Карточка с id ${result._id} удалена` }))
-          .catch((err) => next(new BadRequestError(err.message)));
+          .catch((err) => res.status(400).send({ message: err.message }));
       }
-      throw new AuthorizationError('Необходимо авторизоваться чтобы удалить карточку');
+      return res.status(403).send({ message: 'Необходимо авторизоваться чтобы удалить карточку' });
     })
-    .catch(next);
+    .catch((err) => res.status(500).send({ message: err.message }));
 };
 
 module.exports = {
