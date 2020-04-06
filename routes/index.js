@@ -1,6 +1,6 @@
+const { errors } = require('celebrate');
 const router = require('express').Router();
 
-const { errors } = require('celebrate');
 const errorHandler = require('../middlewares/errorHandler');
 const { requestLogger, errorLogger } = require('../middlewares/logger');
 const authorization = require('./authorization');
@@ -8,11 +8,15 @@ const registration = require('./registration');
 const users = require('./users');
 const cards = require('./cards');
 const error = require('./error');
-const crashTest = require('./crashTest');
 
 router.use(requestLogger); // логгер запросов
 
-router.use('/crash-test', crashTest);
+router.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
+
 router.use('/signin', authorization);
 router.use('/signup', registration);
 router.use('/users', users);
